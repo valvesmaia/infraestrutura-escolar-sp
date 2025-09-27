@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Infraestrutura Escolar</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .form-group { margin: 10px 0; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <h1>Sistema de Infraestrutura Escolar - SP</h1>
+            
+            <!-- Upload CSV -->
+            <div>
+                <h2>Upload de CSV</h2>
+                <input type="file" @change="selecionarArquivo" accept=".csv">
+                <button @click="uploadCSV">Enviar CSV</button>
+                <p v-if="mensagemUpload">{{ mensagemUpload }}</p>
+            </div>
+            
+            <!-- Lista de dados -->
+            <div>
+                <h2>Registros</h2>
+                <button @click="carregarDados">Atualizar Lista</button>
+                
+                <table v-if="registros.length > 0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome da Escola</th>
+                            <th>Endereço</th>
+                            <th>Bairro</th>
+                            <th>Distrito</th>
+                            <th>Tipo Instalação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="registro in registros" :key="registro.id">
+                            <td>{{ registro.id }}</td>
+                            <td>{{ registro.nome_escola }}</td>
+                            <td>{{ registro.endereco }}</td>
+                            <td>{{ registro.bairro }}</td>
+                            <td>{{ registro.distrito }}</td>
+                            <td>{{ registro.tipo_instalacao }}</td>
+                            <td>
+                                <button @click="deletarRegistro(registro.id)">Deletar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    registros: [],
+                    arquivo: null,
+                    mensagemUpload: ''
+                }
+            },
+            methods: {
+                selecionarArquivo(event) {
+                    this.arquivo = event.target.files[0];
+                },
+                
+                async uploadCSV() {
+                    if (!this.arquivo) {
+                        alert('Selecione um arquivo CSV');
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    formData.append('csv_file', this.arquivo);
+                    
+                    try {
+                        const response = await fetch('../backend/upload.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const texto = await response.text();
+                        this.mensagemUpload = texto;
+                        this.carregarDados();
+                    } catch (error) {
+                        this.mensagemUpload = 'Erro no upload: ' + error;
+                    }
+                },
+                
+                async carregarDados() {
+                    try {
+                        const response = await fetch('../backend/api.php?action=listar');
+                        const dados = await response.json();
+                        this.registros = dados;
+                    } catch (error) {
+                        console.error('Erro ao carregar dados:', error);
+                    }
+                },
+                
+                async deletarRegistro(id) {
+                    if (confirm('Tem certeza que deseja deletar?')) {
+                        try {
+                            await fetch(`../backend/api.php?action=deletar&id=${id}`);
+                            this.carregarDados();
+                        } catch (error) {
+                            console.error('Erro ao deletar:', error);
+                        }
+                    }
+                }
+            },
+            
+            mounted() {
+                this.carregarDados();
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
