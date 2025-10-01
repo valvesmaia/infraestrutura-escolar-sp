@@ -17,17 +17,17 @@ Aplicação fullstack desenvolvida para gerenciar dados de infraestrutura das es
 ## 🚀 Tecnologias Utilizadas
 
 ### Backend
-- **PHP 8.x** - Linguagem server-side
-- **PDO (PHP Data Objects)** - Camada de abstração para banco de dados
-- **Sessões PHP** - Gerenciamento de autenticação
+- **PHP 8.x**
+- **PDO (PHP Data Objects)** 
+- **Sessões PHP**
 
 ### Frontend
-- **Vue.js 3** - Framework JavaScript progressivo
-- **Bootstrap 5.3** - Framework CSS para interface responsiva
-- **Bootstrap Icons** - Ícones vetoriais
+- **Vue.js 3**
+- **Bootstrap 5.3**
+- **Bootstrap Icons**
 
 ### Banco de Dados
-- **MySQL** - Sistema de gerenciamento de banco de dados relacional
+- **MySQL**
 
 ### Servidor Local
 - **XAMPP** - Ambiente de desenvolvimento (Apache + MySQL + PHP)
@@ -52,27 +52,11 @@ Aplicação fullstack desenvolvida para gerenciar dados de infraestrutura das es
 - ✅ Feedback visual em todas as operações
 - ✅ Tratamento de erros de conexão
 
-## 📁 Estrutura do Projeto
-
-infraestrutura-escolar-sp/
-├── backend/
-│   ├── config/
-│   │   └── database.php          # Configuração do banco de dados
-│   ├── api.php                    # API REST para operações CRUD
-│   ├── upload.php                 # Processamento de arquivos CSV
-│   ├── login.php                  # Autenticação de usuários
-│   ├── logout.php                 # Encerramento de sessão
-│   └── verificar_login.php        # Verificação de sessão ativa
-├── frontend/
-│   ├── crud.html                  # Gerenciamento de dados (CRUD)
-│   └── upload.html                # Upload de arquivos CSV
-└── README.md
-
 ## ⚙️ Como Executar
 
 ### Pré-requisitos
 - XAMPP instalado (ou Apache + MySQL + PHP 8.x)
-- Navegador web moderno
+- Navegador web
 - Git instalado
 
 ### 1. Clone o repositório
@@ -120,7 +104,7 @@ CREATE TABLE usuarios (
     UNIQUE KEY idx_usuario (usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO usuarios (usuario, senha) VALUES ('teste@teste.com', MD5('123456'));
+INSERT INTO usuarios (usuario, senha) VALUES ('admin@teste.com', MD5('123456'));
 
 3. Configure o Projeto
 3.1. Mova o projeto para o diretório do XAMPP
@@ -173,10 +157,10 @@ http://localhost/Project/infraestrutura-escolar-sp/backend/login.php
 
 ## 🛠️ Decisões Técnicas
 
-- Seleção de Campos do CSV: O arquivo CSV fornecido pela Secretaria de Educação contém 173 colunas. Para este projeto, foram selecionados 13 campos principais que representam as informações mais relevantes sobre a infraestrutura escolar:
+- Seleção de Campos do CSV: O arquivo CSV disponibilizado pela Secretaria de Educação possui um total de 173 colunas. No entanto, para otimizar o tempo de desenvolvimento e manter o foco nas informações mais relevantes sobre a infraestrutura escolar, foram selecionados 13 campos principais. Esses campos representam os dados mais significativos para a análise proposta neste projeto.
 - Campos selecionados:
 
-- Identificação: código, nome, dependência
+- Identificação: código, nome da escola, dependência
 - Localização: município, distrito
 - Classificação: tipo de escola
 - Infraestrutura: salas de aula, biblioteca, quadras (coberta/descoberta), refeitório, laboratórios (informática/ciências)
