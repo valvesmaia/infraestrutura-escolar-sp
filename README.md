@@ -30,7 +30,8 @@ Aplicação fullstack desenvolvida para gerenciar dados de infraestrutura das es
 - **MySQL**
 
 ### Servidor Local
-- **XAMPP** - Ambiente de desenvolvimento (Apache + MySQL + PHP)
+- **Apache** - Servidor web
+
 
 ## 🎯 Funcionalidades Implementadas
 
