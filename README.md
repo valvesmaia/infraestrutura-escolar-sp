@@ -1,5 +1,16 @@
 # Sistema de Infraestrutura Escolar - São Paulo
 
+## 📸 Screenshots do Sistema
+
+### Tela de Login
+![Tela de Login](docs/login.png)
+
+### Gerenciamento de Dados (CRUD)
+![Tela CRUD](docs/crud.png)
+
+### Upload de Arquivo CSV
+![Tela de Upload](docs/upload.png)
+
 ## 💡 Descrição
 Aplicação fullstack desenvolvida para gerenciar dados de infraestrutura das escolas do município de São Paulo. O sistema permite importar dados através de arquivos CSV e realizar operações completas de CRUD (Create, Read, Update, Delete) sobre os registros.
 
