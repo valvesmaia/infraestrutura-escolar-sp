@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD - Sistema Escolar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .table-container {
+            overflow-x: auto;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.375rem;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        
+        .table td {
+            font-size: 0.8rem;
+            white-space: nowrap;
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div id="app">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="crud.html">
+                     Sistema Escolar SP
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="crud.html">
+                                Gerenciar Dados
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="upload.html">
+                                Upload CSV
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-outline-light btn-sm ms-3" onclick="logout()">
+                                <i class="bi bi-box-arrow-right"></i> Sair
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Conteúdo -->
+        <div class="container-fluid py-4">
+            <h2 class="mb-4">Gerenciar Dados das Escolas</h2>
+            
+            <!-- Criar novo registro -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Adicionar Nova Escola</h5>
+                        </div>
+                        <div class="card-body">
+                            <form @submit.prevent="criarRegistro">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Código da Escola</label>
+                                        <input type="text" class="form-control" v-model="novoRegistro.codesc" required minlength="3" maxlength="20">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="conrol-label">Dependência</label>
+                                        <input type="text" class="form-control" v-model="novoRegistro.nomedep" required minlength="3">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label">Nome da Escola</label>
+                                        <input type="text" class="form-control" v-model="novoRegistro.nomesc" required minlength="3">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Município</label>
+                                        <input type="text" class="form-control" v-model="novoRegistro.mun" required minlength="2">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Distrito</label>
+                                        <input type="text" class="form-control" v-model="novoRegistro.distr" required minlength="2">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Tipo</label>
+                                        <input type="text" class="form-control" v-model="novoRegistro.tipoesc_desc" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Salas de Aula</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.salas_aula" min="0" max="999">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Biblioteca</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.biblioteca" min="0" max="999">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Quadra Coberta</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.quadra_coberta" min="0" max="999">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Quadra Descoberta</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.quadra_descoberta" min="0" max="999">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Refeitório</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.refeitorio" min="0" max="999">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Lab. Informática</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.laboratorio_info" min="0" max="999">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label">Lab. Ciências</label>
+                                        <input type="number" class="form-control" v-model="novoRegistro.laboratorio_ciencias" min="0" max="999">
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-success">Adicionar</button>
+                                </div>
+                                
+                                <div v-if="mensagemCriacao" class="mt-3">
+                                    <div :class="['alert', mensagemCriacao.includes('Erro') ? 'alert-danger' : 'alert-success']">
+                                        {{ mensagemCriacao }}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Lista de dados -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Registros Cadastrados</h5>
+                        </div>
+                        <div class="card-body p-0" v-if="registros.length > 0">
+                            <div class="table-container">
+                                <table class="table table-hover table-sm mb-0">
+                                   <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Dependência</th>
+                                            <th>Nome da Escola</th>
+                                            <th>Município</th>
+                                            <th>Distrito</th>
+                                            <th>Tipo</th>
+                                            <th>Salas</th>
+                                            <th>Bibl.</th>
+                                            <th>Q.Cob.</th>
+                                            <th>Q.Desc.</th>
+                                            <th>Refeit.</th>
+                                            <th>Lab.Info</th>
+                                            <th>Lab.Ciên.</th>
+                                            <th class="text-center">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="registro in registros" :key="registro.id">
+                                            <td style="max-width: 70px;">{{ registro.codesc }}</td>
+                                            <td style="max-width: 90px; overflow: hidden; text-overflow: ellipsis;" :title="registro.nomedep">{{ registro.nomedep }}</td>
+                                            <td style="max-width: 120px; overflow: hidden; text-overflow: ellipsis;" :title="registro.nomesc">{{ registro.nomesc }}</td>
+                                            <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;" :title="registro.mun">{{ registro.mun }}</td>
+                                            <td style="max-width: 90px; overflow: hidden; text-overflow: ellipsis;" :title="registro.distr">{{ registro.distr }}</td>
+                                            <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;" :title="registro.tipoesc_desc">{{ registro.tipoesc_desc }}</td>
+                                            <td class="text-center" style="max-width: 50px;">{{ registro.salas_aula }}</td>
+                                            <td class="text-center" style="max-width: 50px;">{{ registro.biblioteca }}</td>
+                                            <td class="text-center" style="max-width: 60px;">{{ registro.quadra_coberta }}</td>
+                                            <td class="text-center" style="max-width: 60px;">{{ registro.quadra_descoberta }}</td>
+                                            <td class="text-center" style="max-width: 60px;">{{ registro.refeitorio }}</td>
+                                            <td class="text-center" style="max-width: 70px;">{{ registro.laboratorio_info }}</td>
+                                            <td class="text-center" style="max-width: 70px;">{{ registro.laboratorio_ciencias }}</td>
+                                            <td class="text-center" style="max-width: 100px;">
+                                                <button class="btn btn-outline-primary btn-sm me-1" @click="editarRegistro(registro)" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger btn-sm" @click="deletarRegistro(registro.id)">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div v-else class="card-body text-center text-muted py-5">
+                            <div v-if="carregando">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Carregando...</span>
+                                </div>
+                                <p class="mt-2">Carregando registros...</p>
+                            </div>
+                            <div v-else>
+                                <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Nenhum registro encontrado</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal de Edição -->
+        <div class="modal fade" id="editModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Registro</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form @submit.prevent="atualizarRegistro">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="control-label">Código</label>
+                                    <input type="text" class="form-control" v-model="registroEditando.codesc" required minlength="3" maxlength="20">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">Dependência</label>
+                                    <input type="text" class="form-control" v-model="registroEditando.nomedep" required minlength="3">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="control-label">Nome da Escola</label>
+                                    <input type="text" class="form-control" v-model="registroEditando.nomesc" required minlength="3">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Município</label>
+                                    <input type="text" class="form-control" v-model="registroEditando.mun" required minlength="3">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Distrito</label>
+                                    <input type="text" class="form-control" v-model="registroEditando.distr" required minlength="3">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Tipo</label>
+                                    <input type="text" class="form-control" v-model="registroEditando.tipoesc_desc" required minlength="3">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Salas</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.salas_aula" min="0" max="999">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Biblioteca</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.biblioteca" min="0" max="999">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Quadra Coberta</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.quadra_coberta" min="0" max="999">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Quadra Descoberta</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.quadra_descoberta" min="0" max="999">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Refeitório</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.refeitorio" min="0" max="999">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Lab. Info</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.laboratorio_info" min="0" max="999">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label">Lab. Ciências</label>
+                                    <input type="number" class="form-control" v-model="registroEditando.laboratorio_ciencias" min="0" max="999">
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <div v-if="mensagemEdicao" class="mt-3">
+                            <div :class="['alert', mensagemEdicao.includes('Erro') ? 'alert-danger' : 'alert-success']">
+                                {{ mensagemEdicao }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" @click="atualizarRegistro">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    registros: [],
+                    carregando: true,
+                    mensagemCriacao: '',
+                    mensagemEdicao: '',
+                    novoRegistro: {
+                        codesc: '',
+                        nomedep: '',
+                        nomesc: '',
+                        mun: '',
+                        distr: '',
+                        tipoesc_desc: '',
+                        salas_aula: 0,
+                        biblioteca: 0,
+                        quadra_coberta: 0,
+                        quadra_descoberta: 0,
+                        refeitorio: 0,
+                        laboratorio_info: 0,
+                        laboratorio_ciencias: 0
+                    },
+                    registroEditando: {}
+                }
+            },
+            methods: {
+                async verificarLogin() {
+                    try {
+                        const response = await fetch('../backend/verificar_login.php');
+                        const resultado = await response.json();
+                        
+                        if (!resultado.logado) {
+                            window.location.href = '../backend/login.php';
+                            return false;
+                        }
+                        return true;
+                    } catch (error) {
+                        window.location.href = '../backend/login.php';
+                        return false;
+                    }
+                },
+                
+                validarDados(dados) {
+                    if (dados.codesc.trim().length < 3 || dados.codesc.length > 20) {
+                        return 'Código deve ter entre 3 e 20 caracteres';
+                    }
+                    if (dados.nomedep.trim().length < 3) {
+                        return 'Dependência deve ter no mínimo 3 caracteres';
+                    }
+                    if (dados.nomesc.trim().length < 3) {
+                        return 'Nome deve ter no mínimo 3 caracteres';
+                    }
+                    
+                    const camposNum = ['salas_aula', 'biblioteca', 'quadra_coberta', 'quadra_descoberta', 'refeitorio', 'laboratorio_info', 'laboratorio_ciencias'];
+                    for (let campo of camposNum) {
+                        const valor = parseInt(dados[campo]);
+                        if (isNaN(valor) || valor < 0 || valor > 999) {
+                            return 'Valores numéricos devem estar entre 0 e 999';
+                        }
+                    }
+                    
+                    return null;
+                },
+                
+                async criarRegistro() {
+                    const erro = this.validarDados(this.novoRegistro);
+                    if (erro) {
+                        this.mensagemCriacao = 'Erro: ' + erro;
+                        return;
+                    }
+                    
+                    try {
+                        const formData = new URLSearchParams();
+                        formData.append('action', 'criar');
+                        formData.append('codesc', this.novoRegistro.codesc.trim());
+                        formData.append('nomedep', this.novoRegistro.nomedep.trim());
+                        formData.append('nomesc', this.novoRegistro.nomesc.trim());
+                        formData.append('mun', this.novoRegistro.mun.trim());
+                        formData.append('distr', this.novoRegistro.distr.trim());
+                        formData.append('tipoesc_desc', this.novoRegistro.tipoesc_desc.trim());
+                        formData.append('salas_aula', this.novoRegistro.salas_aula);
+                        formData.append('biblioteca', this.novoRegistro.biblioteca);
+                        formData.append('quadra_coberta', this.novoRegistro.quadra_coberta);
+                        formData.append('quadra_descoberta', this.novoRegistro.quadra_descoberta);
+                        formData.append('refeitorio', this.novoRegistro.refeitorio);
+                        formData.append('laboratorio_info', this.novoRegistro.laboratorio_info);
+                        formData.append('laboratorio_ciencias', this.novoRegistro.laboratorio_ciencias);
+                        
+                        const response = await fetch('../backend/api.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: formData
+                        });
+                        
+                        const resultado = await response.text();
+                        this.mensagemCriacao = resultado;
+                        
+                        if (resultado === 'Sucesso!') {
+                            this.novoRegistro = {
+                                codesc: '',
+                                nomedep: '',
+                                nomesc: '',
+                                mun: '',
+                                distr: '',
+                                tipoesc_desc: '',
+                                salas_aula: 0,
+                                biblioteca: 0,
+                                quadra_coberta: 0,
+                                quadra_descoberta: 0,
+                                refeitorio: 0,
+                                laboratorio_info: 0,
+                                laboratorio_ciencias: 0
+                            };
+                            this.carregarDados();
+                        }
+                    } catch (error) {
+                        this.mensagemCriacao = 'Erro ao criar: ' + error;
+                    }
+                },
+                
+                editarRegistro(registro) {
+                    this.registroEditando = { ...registro };
+                    this.mensagemEdicao = '';
+                },
+                
+                async atualizarRegistro() {
+                    const erro = this.validarDados(this.registroEditando);
+                    if (erro) {
+                        this.mensagemEdicao = 'Erro: ' + erro;
+                        return;
+                    }
+                    
+                    try {
+                        const formData = new URLSearchParams();
+                        formData.append('action', 'editar');
+                        formData.append('codesc', this.registroEditando.codesc.trim());
+                        formData.append('nomedep', this.registroEditando.nomedep.trim());
+                        formData.append('nomesc', this.registroEditando.nomesc.trim());
+                        formData.append('mun', this.registroEditando.mun.trim());
+                        formData.append('distr', this.registroEditando.distr.trim());
+                        formData.append('tipoesc_desc', this.registroEditando.tipoesc_desc.trim());
+                        formData.append('salas_aula', this.registroEditando.salas_aula);
+                        formData.append('biblioteca', this.registroEditando.biblioteca);
+                        formData.append('quadra_coberta', this.registroEditando.quadra_coberta);
+                        formData.append('quadra_descoberta', this.registroEditando.quadra_descoberta);
+                        formData.append('refeitorio', this.registroEditando.refeitorio);
+                        formData.append('laboratorio_info', this.registroEditando.laboratorio_info);
+                        formData.append('laboratorio_ciencias', this.registroEditando.laboratorio_ciencias);
+                        
+                        const response = await fetch(`../backend/api.php?action=editar&id=${this.registroEditando.id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: formData
+                        });
+                        
+                        const resultado = await response.text();
+                        this.mensagemEdicao = resultado;
+                        
+                        if (resultado === 'Atualizado!') {
+                            this.carregarDados();
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+                            modal.hide();
+                        }
+                    } catch (error) {
+                        this.mensagemEdicao = 'Erro ao atualizar: ' + error;
+                    }
+                },
+                
+                async carregarDados() {
+                    this.carregando = true;
+                    try {
+                        const response = await fetch('../backend/api.php?action=listar');
+                        const dados = await response.json();
+                        this.registros = dados;
+                    } catch (error) {
+                        console.error('Erro:', error);
+                    } finally {
+                        this.carregando = false;
+                    }
+                },
+                
+                async deletarRegistro(id) {
+                    if (confirm('Tem certeza que deseja deletar?')) {
+                        try {
+                            await fetch(`../backend/api.php?action=deletar&id=${id}`);
+                            this.carregarDados();
+                        } catch (error) {
+                            console.error('Erro:', error);
+                        }
+                    }
+                }
+            },
+            
+            async mounted() {
+                const logado = await this.verificarLogin();
+                if (logado) {
+                    this.carregarDados();
+                }
+            }
+        }).mount('#app');
+
+        function logout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                window.location.href = '../backend/logout.php';
+            }
+        }
+    </script>
+</body>
+</html>
