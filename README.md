@@ -52,12 +52,24 @@ Aplicação fullstack desenvolvida para gerenciar dados de infraestrutura das es
 - ✅ Feedback visual em todas as operações
 - ✅ Tratamento de erros de conexão
 
+## 📁 Estrutura do Projeto
+
+Projeto organizado com separação clara entre camadas:
+
+- **backend/** - Lógica de servidor e API REST
+- **frontend/** - Interface do usuário 
+- **database/** - Scripts SQL
+- **docs/** - Documentação visual
+
 ## ⚙️ Como Executar
 
 ### Pré-requisitos
-- XAMPP instalado (ou Apache + MySQL + PHP 8.x)
-- Navegador web
+- PHP 8.x ou superior
+- Apache (ou qualquer servidor web)
+- MySQL 5.7 ou superior
 - Git instalado
+
+**Sugestão:** Para facilitar, você pode usar o XAMPP que já inclui todos esses componentes.
 
 ### 1. Clone o repositório
 ```bash
@@ -65,7 +77,15 @@ git clone https://github.com/valvesmaia/infraestrutura-escolar-sp
 cd infraestrutura-escolar-sp
 
 2. Configure o Banco de Dados
-2.1. Inicie o XAMPP
+2.1. Inicie os serviços
+
+**Se estiver usando XAMPP:**
+- Abra o XAMPP Control Panel
+- Inicie Apache e MySQL
+
+**Se estiver usando Apache/MySQL nativos:**
+- Certifique-se de que os serviços estão rodando
+- Acesse http://localhost/phpmyadmin (ou seu gerenciador MySQL)
 
 Abra o XAMPP Control Panel
 Inicie os serviços Apache e MySQL
@@ -172,8 +192,7 @@ http://localhost/Project/infraestrutura-escolar-sp/backend/login.php
 - Separação de responsabilidades: Backend (PHP) e Frontend (Vue.js) independentes
 - API REST: Endpoints claros para cada operação CRUD
 - Validação em camadas: Frontend (HTML5 + JavaScript) e Backend (PHP)
-S- egurança: Prepared statements (PDO) para prevenir SQL Injection
-
+- egurança: Prepared statements (PDO) para prevenir SQL Injection
 
 ## 🔒 Segurança
 
