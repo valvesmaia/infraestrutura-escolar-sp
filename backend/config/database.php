@@ -1,12 +1,25 @@
 <?php
-    $servidor = 'localhost';
-    $usuario = 'root';
-    $senha = '';
-    $banco = 'infraestrutura_escolar';
+    require __DIR__ . '/../../vendor/autoload.php';
+
+    // Inicializa o Dotenv
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+    $dotenv->load();
+   
+
+    // Pega os dados do .env
+    $servidor = $_ENV['DB_HOST'];
+    $usuario  = $_ENV['DB_USER'];
+    $senha    = $_ENV['DB_PASS'];
+    $banco    = $_ENV['DB_NAME'];
 
     try {
-        $pdo = new PDO("mysql:host=$servidor;dbname=$banco;charset=utf8mb4", $usuario, $senha);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+         // Conecta ao banco usando PDO
+        $pdo = new PDO(
+            "mysql:host=$servidor;dbname=$banco;charset=utf8mb4",
+            $usuario,
+            $senha
+        );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
     } catch(PDOException $e) {
         $mensagemErro = "Erro de conexão com o banco de dados.";
