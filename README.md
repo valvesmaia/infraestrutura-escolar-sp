@@ -127,6 +127,9 @@ CREATE TABLE usuarios (
 
 INSERT INTO usuarios (usuario, senha) VALUES ('admin@teste.com', MD5('123456'));
 
+> ⚠️ O exemplo acima usa `MD5()` apenas para fins de demonstração local rápida.
+> Em produção, senhas devem ser armazenadas com `password_hash()` (bcrypt), nunca MD5.
+
 3. Configure o Projeto
 3.1. Mova o projeto para o diretório do XAMPP
 
@@ -208,7 +211,7 @@ http://localhost/Project/infraestrutura-escolar-sp/backend/login.php
 
 - Campos obrigatórios (required)
 - Tamanho mínimo/máximo de texto (minlength, maxlength)
-- Valores numéricos dentro do intervalo (0-999)
+- Valores numéricos dentro do intervalo (0-999
 - Formato de arquivo (.csv)
 - Tamanho máximo de arquivo (10MB)
 
